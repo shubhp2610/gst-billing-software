@@ -1,0 +1,4 @@
+Enter Email -> [Load Companies] -> Select Companies -> [Load Clients] -> Select Clients -> [Load Bills] -> Select & generate invoices
+                                                                                                        -> Add Bill
+                                                                    -> Add Client
+                                -> Add Company
