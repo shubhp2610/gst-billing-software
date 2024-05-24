@@ -3,11 +3,10 @@ import Sidebar from '@/app/dashboard/components/sidebar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen">
+        <main className="p-4 sm:ml-64">
             <Sidebar />
-            <main className="flex-1 p-8">
-                {children}
-            </main>
-        </div>
+            {children}
+        </main>
+
     );
 }

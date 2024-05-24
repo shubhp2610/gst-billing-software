@@ -34,69 +34,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
-import { CompanyBasic } from '@/app/models/models';
+import { ClientBasic } from '@/app/models/models';
 
-const companies: CompanyBasic[] = [
+const clients: ClientBasic[] = [
   {
     id: 1,
-    name: 'Company 1',
+    name: 'SHUBH SANJAYKUMAR PATEL',
   },
   {
-    id: 32,
-    name: 'Company 2',
+    id: 2,
+    name: 'SANJAYKUMAR LAXMANBHAI PATEL',
   },
   {
-    id: 33,
-    name: 'Company 3',
-  }, {
-    id: 41,
-    name: 'Company 1',
-  },
-  {
-    id: 42,
-    name: 'Company 2',
-  },
-  {
-    id: 43,
-    name: 'Company 3',
-  }, {
-    id: 51,
-    name: 'Company 1',
-  },
-  {
-    id: 52,
-    name: 'Company 2',
-  },
-  {
-    id: 53,
-    name: 'Company 3',
-  }, {
-    id: 61,
-    name: 'Company 1',
-  },
-  {
-    id: 62,
-    name: 'Company 2',
-  },
-  {
-    id: 63,
-    name: 'Company 3',
-  }, {
-    id: 71,
-    name: 'Company 1',
-  },
-  {
-    id: 72,
-    name: 'Company 2',
-  },
-  {
-    id: 73,
-    name: 'Company 3',
+    id: 3,
+    name: 'BINALBEN SANJAYKUMAR PATEL',
   }
 ];
 
-const columns: ColumnDef<CompanyBasic>[] = [
+const columns: ColumnDef<ClientBasic>[] = [
   {
     id: "select",
     // header: ({ table }) => (
@@ -145,12 +109,12 @@ const columns: ColumnDef<CompanyBasic>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const company = row.original;
+      const client = row.original;
 
       return (
         <div className="text-right">
           <Button variant="outline" className="mr-4">Edit</Button>
-          <Button onClick={() => { console.log(company) }}>Select</Button>
+          <Button onClick={() => { console.log(client) }}>Select</Button>
         </div>
       );
     },
@@ -163,7 +127,7 @@ export default function CompanyPage() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 
   const table = useReactTable({
-    data: companies,
+    data: clients,
     columns,
     state: {
       sorting,
@@ -177,23 +141,38 @@ export default function CompanyPage() {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
-
   return (
     <div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/components">Company</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>H N PATEL & ASSOCIACETES</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flow-root">
-        <h1 className="float-left text-3xl font-bold">Select Company</h1>
-        <Button className="float-right">Add Company</Button>
+        <h1 className="float-left text-3xl font-bold">Select Client</h1>
+        <Button className="float-right">Add Client</Button>
       </div>
       <div className="w-full">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter Company..."
+            placeholder="Filter Clients..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
+
         </div>
         <div className="rounded-md border">
           <Table>
@@ -216,21 +195,24 @@ export default function CompanyPage() {
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows?.length ? (table.getRowModel().rows?.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))) : (
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
@@ -245,11 +227,10 @@ export default function CompanyPage() {
         </div>
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredRowModel().rows.length} company(s).
+            {table.getFilteredRowModel().rows.length} client(s).
           </div>
         </div>
       </div>
     </div>
   );
-
 }
