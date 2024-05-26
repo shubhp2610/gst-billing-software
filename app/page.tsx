@@ -1,17 +1,20 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-
+import {redirect} from 'next/navigation'
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/app/auth/loginform"
-
+import { checkUser } from "@/lib/authUtil"
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 }
 
 export default function AuthenticationPage() {
+  if(checkUser()){
+    redirect('/dashboard/company')
+  }
   return (
     <>
       <div className="md:hidden">

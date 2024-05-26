@@ -38,7 +38,6 @@ export default function ClientDetails() {
             </Breadcrumb>
             <div className="flow-root mt-4 mb-4">
                 <h1 className="float-left"><p className="text-3xl font-bold">SHUBH SANJAYKUMAR PATEL</p><span>A-37, JADHAV AMISHRADHA SOC, AJWA MAIN ROAD, AJWA MAIN ROAD, VADODARA</span></h1>
-                
             </div>
             <Tabs defaultValue="particulars">
                 <TabsList className="grid w-full grid-cols-2">

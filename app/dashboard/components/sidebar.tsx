@@ -1,6 +1,8 @@
+'use client';
 import React from 'react';
-import Link from 'next/link';
-
+import { Button } from '@/components/ui/button';
+import { redirect } from 'next/navigation';
+import { setCookie } from 'cookies-next';
 const Sidebar = () => {
     return (
         <>
@@ -27,7 +29,14 @@ const Sidebar = () => {
                                 <span className="ms-3">Client</span>
                             </a>
                         </li>
-                        
+                        <li>
+                            <Button onClick={async () => {
+                                setCookie('userid', '', { maxAge: 0 })
+                                window.location.href = '/'
+                            }} >Logout</Button>
+                        </li>
+
+
                     </ul>
                 </div>
             </aside>

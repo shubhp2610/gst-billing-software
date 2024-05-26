@@ -1,37 +1,56 @@
 "use client"
-
 import * as React from "react"
-
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useRouter } from 'next/navigation';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { cookies } from 'next/headers'
+import { generateJWT } from "@/lib/jwtUtil"
+
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+ 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [error, setError] = React.useState<string | null>(null)
+  const { push } = useRouter();
 
-  const router = useRouter()
- 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
- 
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get('email')
-    console.log(email)
- 
-    if (email=="himansu@validuser.com") {
-      router.push('/dashboard')
-    } else {
-        setError("Invalid email")
+    event.preventDefault() 
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get('email');
+
+    setIsLoading(true); // Set loading state for UI feedback
+    setError(null); // Clear any previous errors
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        body: formData
+      });
+      console.log(response.status);
+      if (response.ok) {
+        console.log('Login successful');
+        // Redirect handled on the server-side
+        // Handle success case in UI if needed (e.g., success message)
+        push("/dashboard/company")
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error); // Update error state
+      }
+    } catch (error) {
+      console.error('Error submitting login form:', error);
+      setError('An unexpected error occurred'); // Generic error message
+    } finally {
+      setIsLoading(false); // Reset loading state
     }
   }
+
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>

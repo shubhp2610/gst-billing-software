@@ -1,13 +1,13 @@
-type CompanyBasic = {
+export type CompanyBasic = {
     id: number;
     name: string;
 }
-type ClientBasic = {
+export type ClientBasic = {
     id: number;
     name: string;
 }
 
-type ClientParticulars = {
+export type ClientParticulars = {
     id:number,
     name:string,
     year:string,
@@ -15,4 +15,10 @@ type ClientParticulars = {
     amount:number,
     date:string,
 }
-export type { CompanyBasic, ClientBasic,ClientParticulars}
+
+export type DB_Client = {
+    id:number | null,
+    username:string | null,
+    symbol:string | null
+}
+

@@ -1,6 +1,5 @@
-"use client";
-
-import * as React from "react";
+"use client"
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -36,6 +35,9 @@ import {
 } from "@/components/ui/table";
 
 import { CompanyBasic } from '@/app/models/models';
+import { getCookie, setCookie } from "cookies-next";
+import { fetchUser } from "@/lib/client_authUtil";
+import { checkJWT, decodeJWT } from "@/lib/jwtUtil";
 
 const companies: CompanyBasic[] = [
   {
@@ -158,9 +160,35 @@ const columns: ColumnDef<CompanyBasic>[] = [
 ];
 
 export default function CompanyPage() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [userData, setUserData] = useState("");
+
+  useEffect(() => {
+    const handleWindowLoad = () => {
+      const data = getCookie('userid') as string;
+
+      const userData = decodeJWT(data)
+      if (!userData) {
+        setCookie('userid', '', { maxAge: 0 })
+        window.location.href = '/'
+      }
+      if (data) {
+        setUserData(data);
+      }
+    };
+
+    if (document.readyState === 'complete') {
+      // Document is already ready
+      handleWindowLoad();
+      console.log(userData);
+    } else {
+      // Attach event listener
+      window.addEventListener('load', handleWindowLoad);
+      return () => window.removeEventListener('load', handleWindowLoad);
+    }
+  }, []);
 
   const table = useReactTable({
     data: companies,
