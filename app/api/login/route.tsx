@@ -1,7 +1,7 @@
 import { generateJWT } from '@/lib/jwtUtil';
 import { cookies } from 'next/headers';
-import { getUsers } from '@/app/db/readConnection';
-import { DB_Client } from '@/app/models/models';
+import { runQuery } from '@/app/db/writeConnection';
+import { DB_User } from '@/app/models/models';
 // async function streamToString(stream: any) {
 //     const chunks = [];
 //     for await (const chunk of stream) { chunks.push(chunk); } 
@@ -18,8 +18,8 @@ export async function POST(req: Request) {
 
     if (email) {
         const query = "SELECT * FROM Users WHERE username = ?";
-        const result = (await getUsers(query, [email])) as DB_Client[];
-        const user: DB_Client = result[0];
+        const result = (await runQuery(query, [email])) as DB_User[];
+        const user: DB_User = result[0];
         if (!user) {
             return Response.json({ error: 'Invalid email' }, { status: 401 });
         }

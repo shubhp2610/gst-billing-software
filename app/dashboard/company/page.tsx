@@ -34,71 +34,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { CompanyBasic } from '@/app/models/models';
+import { CompanyBasic, DB_Company } from '@/app/models/models';
 import { getCookie, setCookie } from "cookies-next";
 import { fetchUser } from "@/lib/client_authUtil";
 import { checkJWT, decodeJWT } from "@/lib/jwtUtil";
+import { useCookies } from 'react-cookie';
+import { set } from "react-hook-form";
+import { Alert } from "@/components/ui/alert";
+import { redirect } from "next/dist/server/api-utils";
+import { usePathname } from "next/navigation";
+import { Icons } from "@/components/icons";
 
-const companies: CompanyBasic[] = [
-  {
-    id: 1,
-    name: 'Company 1',
-  },
-  {
-    id: 32,
-    name: 'Company 2',
-  },
-  {
-    id: 33,
-    name: 'Company 3',
-  }, {
-    id: 41,
-    name: 'Company 1',
-  },
-  {
-    id: 42,
-    name: 'Company 2',
-  },
-  {
-    id: 43,
-    name: 'Company 3',
-  }, {
-    id: 51,
-    name: 'Company 1',
-  },
-  {
-    id: 52,
-    name: 'Company 2',
-  },
-  {
-    id: 53,
-    name: 'Company 3',
-  }, {
-    id: 61,
-    name: 'Company 1',
-  },
-  {
-    id: 62,
-    name: 'Company 2',
-  },
-  {
-    id: 63,
-    name: 'Company 3',
-  }, {
-    id: 71,
-    name: 'Company 1',
-  },
-  {
-    id: 72,
-    name: 'Company 2',
-  },
-  {
-    id: 73,
-    name: 'Company 3',
-  }
-];
 
-const columns: ColumnDef<CompanyBasic>[] = [
+const columns: ColumnDef<DB_Company>[] = [
   {
     id: "select",
     // header: ({ table }) => (
@@ -151,8 +99,12 @@ const columns: ColumnDef<CompanyBasic>[] = [
 
       return (
         <div className="text-right">
-          <Button variant="outline" className="mr-4">Edit</Button>
-          <Button onClick={() => { console.log(company) }}>Select</Button>
+          <Button variant="outline" className="mr-4" onClick={()=>{window.location.assign('/dashboard/company/edit/'+company.id)}}>Edit</Button>
+          <Button onClick={() => { 
+            setCookie('company', company.name, { maxAge: 60 * 60 * 24 * 7 });
+            setCookie('companyId', company.id, { maxAge: 60 * 60 * 24 * 7 });
+            window.location.assign('/dashboard/client');
+           }}>Select</Button>
         </div>
       );
     },
@@ -164,34 +116,43 @@ export default function CompanyPage() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [userData, setUserData] = useState("");
-
+  const [userCookie, setUserCookie] = useCookies(['userid']);
+  const [companyData, setCompanyData] = useState<DB_Company[]>([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    const handleWindowLoad = () => {
-      const data = getCookie('userid') as string;
+    const fetchCompanies = async () => {
+      const formData = new FormData();
+      formData.append("prefix", userData.symbol);
 
-      const userData = decodeJWT(data)
-      if (!userData) {
-        setCookie('userid', '', { maxAge: 0 })
-        window.location.href = '/'
+      const companies = await fetch('/api/company/get', {
+        method: 'POST',
+        body: formData
+      })
+      if (companies.status !== 200 && companies.status !== 404) {
+        setError("Error Fetching Company Data");
       }
-      if (data) {
-        setUserData(data);
-      }
-    };
-
-    if (document.readyState === 'complete') {
-      // Document is already ready
-      handleWindowLoad();
-      console.log(userData);
-    } else {
-      // Attach event listener
-      window.addEventListener('load', handleWindowLoad);
-      return () => window.removeEventListener('load', handleWindowLoad);
+      const fetchedData = await companies.json();
+      console.log(fetchedData);
+      setLoading(false);
+      setCompanyData(fetchedData.company);
+      console.log(companyData);
+      //setCompanyData(companies);
     }
-  }, []);
+
+    const userData = decodeJWT(userCookie.userid)
+    if (!userData) {
+      setCookie('userid', '', { maxAge: 0 })
+      window.location.href = '/'
+    }
+    if (userData) {
+      console.log(userData);
+      fetchCompanies();
+    };
+  }, [userCookie]);
 
   const table = useReactTable({
-    data: companies,
+    data: companyData,
     columns,
     state: {
       sorting,
@@ -210,9 +171,10 @@ export default function CompanyPage() {
     <div>
       <div className="flow-root">
         <h1 className="float-left text-3xl font-bold">Select Company</h1>
-        <Button className="float-right">Add Company</Button>
+        <Button className="float-right" onClick={() => { window.location.assign('/dashboard/company/edit/new'); }}>Add Company</Button>
       </div>
       <div className="w-full">
+        {error != "" && <Alert variant="destructive">{error}</Alert>}
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter Company..."
@@ -264,7 +226,9 @@ export default function CompanyPage() {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    No results.
+                    {loading ? (
+                     <center><Icons.spinner className="mr-2 h-4 w-4 animate-spin text-center" /></center>
+                    ) : "No results"}
                   </TableCell>
                 </TableRow>
               )}
