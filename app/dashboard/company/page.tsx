@@ -36,7 +36,7 @@ import {
 
 import { CompanyBasic, DB_Company } from '@/app/models/models';
 import { getCookie, setCookie } from "cookies-next";
-import { fetchUser } from "@/lib/client_authUtil";
+
 import { checkJWT, decodeJWT } from "@/lib/jwtUtil";
 import { useCookies } from 'react-cookie';
 import { set } from "react-hook-form";

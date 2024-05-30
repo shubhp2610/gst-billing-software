@@ -89,6 +89,7 @@ import { setCookie } from "cookies-next";
 import { useCookies } from "react-cookie";
 import { Icons } from "@/components/icons";
 import EditParticulate from "./editP";
+import { SelectSingleEventHandler } from "react-day-picker";
 
 
 // const particulars: ClientParticulars[] = [
@@ -308,7 +309,12 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
       setError("Error Adding Particulate");
     }
   }
-
+  const handleDateSelect: SelectSingleEventHandler = (day) => {
+    if (day) {
+      setDate(day);
+    }
+  };
+  
   const handleCreateInvoice = async () => {
     console.log(Object.keys(rowSelection))
     var ids="";
@@ -424,7 +430,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
                       <SelectContent>
                         <SelectGroup>
                           {yearRanges.map((range, index) => (
-                            <SelectItem value={range}>
+                            <SelectItem value={range} key={range}>
                               {range}
                             </SelectItem>
                           ))}
@@ -469,7 +475,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
                         <Calendar
                           mode="single"
                           selected={date}
-                          onSelect={setDate}
+                          onSelect={handleDateSelect}
                           initialFocus
                         />
                       </PopoverContent>
