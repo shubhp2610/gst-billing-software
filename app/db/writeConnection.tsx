@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 import { DB_User } from '@/app/models/models'
-export async function runQuery(query: string, data: (string | undefined)[]) {
+export async function runQuery(query: string, data: (string | number | undefined)[]) {
     try {
         const db = await mysql.createConnection({
             host: 'db-write.261403.xyz',

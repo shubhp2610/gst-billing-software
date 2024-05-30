@@ -200,7 +200,7 @@ const EditParticulate: React.FC<editParticulate> = ({ clientid, id, particulars,
                                 <SelectContent>
                                     <SelectGroup>
                                         {yearRanges.map((range, index) => (
-                                            <SelectItem value={range}>
+                                            <SelectItem value={range} key={range}>
                                                 {range}
                                             </SelectItem>
                                         ))}

@@ -66,3 +66,12 @@ export type DB_Particulars = {
     company_id: number;
     client_id: number;
 };
+
+export type DB_Invoice = {
+    id: number,
+    company_id: number,
+    client_id: number,
+    invoice_no: number,
+    date: string,
+    gstin: boolean,
+}

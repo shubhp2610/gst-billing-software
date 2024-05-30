@@ -152,6 +152,9 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
     }
     fetchParticulars();
   }, [cookiez]);
+
+  
+
   const columns: ColumnDef<DB_Particulars>[] = [
     {
       id: "select",
@@ -306,11 +309,35 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
     }
   }
 
+  const handleCreateInvoice = async () => {
+    console.log(Object.keys(rowSelection))
+    var ids="";
+    for (const key in rowSelection) {
+      ids+=particularsDetails[Number(key)].id+",";
+    }
+    const formData = new FormData();
+    formData.append('clientId', clientID);
+    formData.append('particulars', ids.slice(0, -1));
+    formData.append('date', format(new Date(), "dd-MM-yyyy"));
+    const added = await fetch('/api/invoice/add', {
+      method: 'POST',
+      body: formData
+    });
+    if (added.status == 200) {
+      const data = await added.json();
+      console.log(data);
+      window.location.href = `/invoice/${data.message}`;
+      // setMessage("Invoice Created Successfully!");
+      // setCookie('reload', 'true', { maxAge: 1 })
+    } else {
+      // setError("Error Creating Invoice");
+    }
+  }
 
   return (
     <Card>
       <CardContent className="space-y-2 p-4">
-        <div className="text-right">{showInvoiceButton && <Button className="mr-4 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300" >Create Invoice</Button>}
+        <div className="text-right">{showInvoiceButton && <Button className="mr-4 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300" onClick={handleCreateInvoice}>Create Invoice</Button>}
           <Dialog>
             <DialogTrigger asChild>
               <Button>Add Particulates</Button>
