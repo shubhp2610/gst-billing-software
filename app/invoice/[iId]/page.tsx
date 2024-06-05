@@ -144,7 +144,7 @@ export default function Page({ params }: { params: { iId: string } }) {
                 </div>
                 {data?.invoice.particulars.map((particular, index) => {
                     return (
-                        <div className='flex border-r border-l border-b border-black text-center'>
+                        <div key={index} className='flex border-r border-l border-b border-black text-center'>
                             <div className={`flex ${data?.invoice?.gst ? 'w-2/6' : 'w-3/6'}`}>
                                 <div className='w-1/6 border-r border-black text-center'>{index + 1}</div>
                                 <div className='w-3/6 border-r border-black text-left pl-px'>{particular.particulars}</div>

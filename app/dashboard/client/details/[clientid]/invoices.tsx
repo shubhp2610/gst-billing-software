@@ -167,7 +167,7 @@ export default function InvoiceTable({ clientID }: { clientID: string }) {
                   </div>
                   {invoice.particulars.map((particular) => {
                     return (
-                      <span className="border-black border bordr rounded p-1 mr-2 text-sm">
+                      <span key={particular.id} className="border-black border bordr rounded p-1 mr-2 text-sm">
                         {particular.particulars} - <b>{particular.amount}</b>
                       </span>
                     )
