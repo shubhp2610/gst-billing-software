@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     const companyId = cookies().get('companyId')?.value;
     const clientId = formData.get('clientId')?.toString();
     const particulars = formData.get('particulars')?.toString();
-
+    const gst = formData.get('gst')?.toString();
     // Log clientId and particulars for debugging
     console.log('ClientId:', clientId);
     console.log('Particulars:', particulars);
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
             VALUES (?, ?, ?, ?, ?)
         `;
         const invoiceResult = await runQuery(insertInvoiceQuery, [
-            companyId, clientId, invoice_id, formData.get('date')?.toString(), 0
+            companyId, clientId, invoice_id, formData.get('date')?.toString(), gst=='0'?0:1
         ]);
 
         const invoiceId = (invoiceResult as any).insertId; // Adjust this cast based on actual return type

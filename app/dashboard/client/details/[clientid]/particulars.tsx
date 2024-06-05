@@ -90,6 +90,7 @@ import { useCookies } from "react-cookie";
 import { Icons } from "@/components/icons";
 import EditParticulate from "./editP";
 import { SelectSingleEventHandler } from "react-day-picker";
+import { Switch } from "@/components/ui/switch";
 
 
 // const particulars: ClientParticulars[] = [
@@ -131,6 +132,14 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
   const [particularsDetails, setParticularsDetails] = React.useState({} as DB_Particulars[])
   const [loadingAdded, setLoadingAdded] = React.useState(false)
   const [loadingDeleted, setLoadingDeleted] = React.useState(0)
+  const [isGstBill, setIsGstBill] = React.useState(false);
+  const [isCreateInvoiceLoading, setIsCreateInvoiceLoading] = React.useState(false);
+  const handleCheckedChange = (checked:boolean) => {
+    setIsGstBill(checked);
+  };
+  React.useEffect(() => {
+    console.log(isGstBill);
+  }, [isGstBill]);
   React.useEffect(() => {
     if (Object.keys(rowSelection).length > 0) {
       setShowInvoiceButton(true)
@@ -154,7 +163,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
     fetchParticulars();
   }, [cookiez]);
 
-  
+
 
   const columns: ColumnDef<DB_Particulars>[] = [
     {
@@ -314,17 +323,19 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
       setDate(day);
     }
   };
-  
+
   const handleCreateInvoice = async () => {
+    setIsCreateInvoiceLoading(true);
     console.log(Object.keys(rowSelection))
-    var ids="";
+    var ids = "";
     for (const key in rowSelection) {
-      ids+=particularsDetails[Number(key)].id+",";
+      ids += particularsDetails[Number(key)].id + ",";
     }
     const formData = new FormData();
     formData.append('clientId', clientID);
     formData.append('particulars', ids.slice(0, -1));
     formData.append('date', format(new Date(), "dd-MM-yyyy"));
+    formData.append('gst', isGstBill ? '1' : '0');
     const added = await fetch('/api/invoice/add', {
       method: 'POST',
       body: formData
@@ -332,6 +343,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
     if (added.status == 200) {
       const data = await added.json();
       console.log(data);
+      setIsCreateInvoiceLoading(false);
       window.location.href = `/invoice/${data.message}`;
       // setMessage("Invoice Created Successfully!");
       // setCookie('reload', 'true', { maxAge: 1 })
@@ -343,7 +355,15 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
   return (
     <Card>
       <CardContent className="space-y-2 p-4">
-        <div className="text-right">{showInvoiceButton && <Button className="mr-4 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300" onClick={handleCreateInvoice}>Create Invoice</Button>}
+        <div className="text-right">
+          {showInvoiceButton && <div className="flex items-center space-x-2">
+            <Switch id="airplane-mode" onCheckedChange={handleCheckedChange}  />
+            <Label htmlFor="airplane-mode">GST Bill</Label>
+            <Button className="mr-4 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300" onClick={handleCreateInvoice}>
+              {isCreateInvoiceLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin text-center" />}
+              Create Invoice
+              </Button>
+          </div>}
           <Dialog>
             <DialogTrigger asChild>
               <Button>Add Particulates</Button>
