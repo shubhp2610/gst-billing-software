@@ -119,7 +119,7 @@ const columns: ColumnDef<DB_Client>[] = [
 
       return (
         <div className="text-right">
-          <EditClient id={client.id} name={client.name} address={client.address} />
+          <EditClient id={client.id} name={client.name} address={client.address} pan={client.pan} gstin={client.gstin} />
           <Button onClick={() => { window.location.assign('/dashboard/client/details/'+client.id) }} className="ml-4">Select</Button>
         </div>
       );
@@ -255,6 +255,22 @@ export default function CompanyPage() {
                     <Input
                       id="address"
                       name="address"
+                      onChange={inputCapital}
+                    />
+                    <Label htmlFor="pan">
+                      Pan
+                    </Label>
+                    <Input
+                      id="pan"
+                      name="pan"
+                      onChange={inputCapital}
+                    />
+                    <Label htmlFor="gstin">
+                      GSTIN
+                    </Label>
+                    <Input
+                      id="gstin"
+                      name="gstin"
                       onChange={inputCapital}
                     />
                   </div>

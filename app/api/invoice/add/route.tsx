@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         let invoice_id = invoices.length > 0 ? (invoices[invoices.length - 1].id + 1) : 1;
 
         const insertInvoiceQuery = `
-            INSERT INTO ${prefix}_Invoices (company_id, client_id, invoice_no, date, gstin)
+            INSERT INTO ${prefix}_Invoices (company_id, client_id, invoice_no, date, gst)
             VALUES (?, ?, ?, ?, ?)
         `;
         const invoiceResult = await runQuery(insertInvoiceQuery, [
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 
         for (const pId of pIds) {
             const insertParticularQuery = `
-                INSERT INTO ${prefix}_Particulars (invoice_id, particulars_id)
+                INSERT INTO ${prefix}_Invoice_Particulars (invoice_id, particulars_id)
                 VALUES (?, ?)
             `;
             await runQuery(insertParticularQuery, [invoiceId, pId]);

@@ -31,6 +31,7 @@
     "lucide-react": "^0.379.0",
     "mysql2": "^3.9.7",
     "next": "14.2.3",
+    "number-to-words": "^1.2.4",
     "react": "^18",
     "react-cookie": "^7.1.4",
     "react-day-picker": "^8.10.1",

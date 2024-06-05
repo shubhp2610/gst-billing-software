@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     }
 
     const fields = [
-        'name', 'address'
+        'name', 'address','pan','gstin'
     ];
 
     const values = fields.map(field => formData.get(field)?.toString());
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         // Update existing company
         const query = `
             UPDATE ${prefix}_Client SET 
-                name = ?, address = ? WHERE id = ?
+                name = ?, address = ?, pan = ?, gstin = ? WHERE id = ?
         `;
         try {
             const qr = await runQuery(query, [...values, id]);

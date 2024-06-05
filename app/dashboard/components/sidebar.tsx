@@ -19,7 +19,7 @@ const Sidebar = () => {
                     <ul className="space-y-2 font-medium">
                         <p className='text-lg text-white font-bold'>Billing Dashboard</p>
                         <hr></hr>
-                        <li>
+                        {/* <li>
                             <a href="#" className="flex items-center p-2 pl-0 rounded-lg text-white hover:bg-gray-700 group">
                                 <span className="ms-3">Company</span>
                             </a>
@@ -28,7 +28,7 @@ const Sidebar = () => {
                             <a href="#" className="flex items-center p-2 pl-0 rounded-lg text-white hover:bg-gray-700 group">
                                 <span className="ms-3">Client</span>
                             </a>
-                        </li>
+                        </li> */}
                         <li>
                             <Button onClick={async () => {
                                 setCookie('userid', '', { maxAge: 0 })

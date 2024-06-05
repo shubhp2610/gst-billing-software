@@ -54,6 +54,8 @@ export type DB_Client = {
     name: string;
     company_id: number;
     address: string;
+    pan: string;
+    gstin: string;
 };
 
 export type DB_Particulars = {
@@ -73,5 +75,20 @@ export type DB_Invoice = {
     client_id: number,
     invoice_no: number,
     date: string,
-    gstin: boolean,
+    gst: boolean,
+}
+
+export type DB_Invoice_Data = {
+    id: number,
+    company_id: number,
+    client_id: number,
+    invoice_no: number,
+    date: string,
+    gst: boolean,
+    particulars: DB_Particulars[]
+}
+export type DB_Invoice_Data_Complete = {
+    client: DB_Client,
+    company: DB_Company,
+    invoice: DB_Invoice_Data
 }

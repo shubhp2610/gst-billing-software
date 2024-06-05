@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/tabs"
 import { useEffect, useState } from "react";
 import ParticularsTable from "./particulars"
+import InvoiceTable from "./invoices"
 import { DB_Client } from "@/app/models/models";
 import { Icons } from "@/components/icons";
 import { useCookies } from "react-cookie";
@@ -75,7 +76,7 @@ export default function ClientDetails({ params }: { params: { clientid: string }
                     <ParticularsTable clientID={params.clientid} />
                 </TabsContent>
                 <TabsContent value="invoices">
-                    bye
+                <InvoiceTable clientID={params.clientid} />
                 </TabsContent>
             </Tabs>
 

@@ -67,10 +67,12 @@ import { Icons } from "@/components/icons";
 interface editProps {
     id: number,
     name: string,
-    address: string
+    address: string,
+    pan: string,
+    gstin: string
 }
 
-const EditClient: React.FC<editProps> = ({ id, name, address }) => {
+const EditClient: React.FC<editProps> = ({ id, name, address, pan, gstin }) => {
     const [error, setError] = React.useState("");
     const [message, setMessage] = React.useState("");
     const [loading2, setLoading2] = React.useState(false);
@@ -121,6 +123,23 @@ const EditClient: React.FC<editProps> = ({ id, name, address }) => {
                                 id="address"
                                 name="address"
                                 defaultValue={address}
+                                onChange={inputCapital}
+                            />
+                            <Label htmlFor="pan">
+                                Pan
+                            </Label>
+                            <Input
+                                id="pan"
+                                name="pan"
+                                defaultValue={pan}
+                                onChange={inputCapital}
+                            /><Label htmlFor="gstin">
+                                GSTIN
+                            </Label>
+                            <Input
+                                id="gstin"
+                                name="gstin"
+                                defaultValue={gstin}
                                 onChange={inputCapital}
                             />
                             <Input

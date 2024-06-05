@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const userid = await cookies().get('userid')?.value
     const companyId = await cookies().get('companyId')?.value
     console.log(userid);
-    if(!userid || !companyId) {
+    if (!userid || !companyId) {
         return new Response(JSON.stringify({ error: 'Invalid Request' }), { status: 401 });
     }
     const userData = decodeJWT(userid);
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     }
 
     const fields = [
-        'name', 'address'
+        'name', 'address', 'pan', 'gstin'
     ];
 
     const values = fields.map(field => formData.get(field)?.toString());
@@ -33,12 +33,12 @@ export async function POST(req: Request) {
 
     const query = `
         INSERT INTO ${prefix}_Client (
-            company_id, name, address
-        ) VALUES (?, ?, ?)
+            company_id, name, address,pan,gstin
+        ) VALUES (?, ?, ?,?,?)
     `;
     console.log(query);
     try {
-        const qr =  await runQuery(query, [companyId, ...values]);
+        const qr = await runQuery(query, [companyId, ...values]);
         console.log(qr);
         return new Response(JSON.stringify({ message: 'Company inserted successfully' }), { status: 200 });
     } catch (error) {

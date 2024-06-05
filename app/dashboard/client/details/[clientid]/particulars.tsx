@@ -372,14 +372,14 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
                         >
                           {value || newParticulate
                             ? pValues.find((pval) => pval === value) || newParticulate
-                            : "Select framework..."}
+                            : "Select particulate..."}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[400px] p-0">
                         <Command>
                           <CommandInput
-                            placeholder="Search framework..."
+                            placeholder="Search particulate..."
                             className="uppercase"
                             onKeyDown={(e) => {
                               if (e.key === 'Enter' && !pValues.includes((e.target as HTMLInputElement).value)) {
@@ -389,7 +389,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
                               }
                             }}
                           />
-                          <CommandEmpty>No framework found.</CommandEmpty>
+                          <CommandEmpty>No particulate found.</CommandEmpty>
                           <CommandGroup>
                             <CommandList>
                               {pValues.map((pval) => (

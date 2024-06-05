@@ -37,6 +37,8 @@ CREATE TABLE HAMU_Client(
     company_id INT NOT NULL,
     name TEXT,
     address TEXT,
+    pan TEXT,
+    gstin TEXT,
     FOREIGN KEY (company_id) REFERENCES HAMU_Company(id)
 );
 
