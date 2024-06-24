@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ error: 'Invalid prefix' }), { status: 401 });
     }
 
-    const query = `SELECT * FROM ${prefix}_Particulars WHERE company_id = ? AND client_id = ?`;
+    const query = `SELECT * FROM ${prefix}_Particulars WHERE company_id = ? AND client_id = ? AND deleted = 0`;
     const result = (await runQuery(query, [companyId, clientId])) as DB_Particulars[];
     const particulars: DB_Particulars[] = result;
     if (!particulars) {

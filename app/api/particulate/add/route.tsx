@@ -34,8 +34,8 @@ export async function POST(req: Request) {
 
     const query = `
         INSERT INTO ${prefix}_Particulars (
-            particulars, year, type, amount, date, company_id, client_id
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            particulars, year, type, amount, date, company_id, client_id, deleted
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, 0)
     `;
     console.log(query);
     try {

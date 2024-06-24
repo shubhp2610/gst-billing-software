@@ -67,6 +67,7 @@ export type DB_Particulars = {
     date: string;
     company_id: number;
     client_id: number;
+    deleted: boolean;
 };
 
 export type DB_Invoice = {

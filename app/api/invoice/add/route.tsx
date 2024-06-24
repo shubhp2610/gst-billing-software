@@ -2,6 +2,8 @@ import { decodeJWT } from '@/lib/jwtUtil';
 import { cookies } from 'next/headers';
 import { runQuery } from '@/app/db/writeConnection';
 import { DB_Invoice } from '@/app/models/models';
+import moment from 'moment-timezone';
+
 
 export async function POST(req: Request) {
     const formData = await req.formData();
@@ -27,10 +29,12 @@ export async function POST(req: Request) {
     if (!prefix) {
         return new Response(JSON.stringify({ error: 'Invalid prefix' }), { status: 400 });
     }
-
-    const selectQuery = `SELECT * FROM ${prefix}_Invoices WHERE company_id = ? AND client_id = ?`;
+    const istDate = moment().tz('Asia/Kolkata');
+    const formattedDate = istDate.format('DD-MM-YYYY');
+    const selectQuery = `SELECT * FROM ${prefix}_Invoices WHERE company_id = ? AND client_id = ? AND date = ?`;
+   
     try {
-        const invoices = await runQuery(selectQuery, [companyId, clientId]) as DB_Invoice[];
+        const invoices = await runQuery(selectQuery, [companyId, clientId,formattedDate]) as DB_Invoice[];
         let invoice_id = invoices.length > 0 ? (invoices[invoices.length - 1].id + 1) : 1;
 
         const insertInvoiceQuery = `

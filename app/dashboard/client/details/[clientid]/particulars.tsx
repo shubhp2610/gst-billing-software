@@ -280,7 +280,7 @@ export default function ParticularsTable({ clientID }: { clientID: string }) {
     for (let i = 0; i < numOfRanges; i++) {
       const endYear = startYear - i;
       const startRange = endYear - 1;
-      ranges.push(`${endYear}-${startRange}`);
+      ranges.push(`${startRange}-${endYear}`);
     }
     return ranges;
   };

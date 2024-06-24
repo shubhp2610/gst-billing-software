@@ -51,6 +51,7 @@ CREATE TABLE HAMU_Particulars(
     date TEXT,
     company_id INT,
     client_id INT,
+    deleted BOOLEAN,
     FOREIGN KEY (company_id) REFERENCES HAMU_Company(id),
     FOREIGN KEY (client_id) REFERENCES HAMU_Client(id)
 );

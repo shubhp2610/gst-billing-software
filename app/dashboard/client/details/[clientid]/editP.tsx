@@ -89,7 +89,7 @@ const EditParticulate: React.FC<editParticulate> = ({ clientid, id, particulars,
         for (let i = 0; i < numOfRanges; i++) {
             const endYear = startYear - i;
             const startRange = endYear - 1;
-            ranges.push(`${endYear}-${startRange}`);
+            ranges.push(`${startRange}-${endYear}`);
         }
         return ranges;
     };

@@ -24,12 +24,13 @@ export async function POST(req: Request) {
         return new Response(JSON.stringify({ error: 'Invalid prefix' }), { status: 401 });
     }
 
-    const query = `DELETE FROM ${prefix}_Particulars WHERE company_id = ? AND client_id = ? AND id = ?`;
-    const result = (await runQuery(query, [companyId, clientId, id])) as DB_Particulars[];
-    const particulars: DB_Particulars[] = result;
-    if (!particulars) {
-        return Response.json({ error: 'No Company Found' }, { status: 404 });
+    const query = `UPDATE ${prefix}_Particulars SET deleted = 1 WHERE company_id = ? AND client_id = ? AND id = ?`
+    try {
+        const qr = await runQuery(query, [companyId, clientId, id]);
+        console.log(qr);
+        return new Response(JSON.stringify({ message: 'Particulars deleted successfully' }), { status: 200 });
+    } catch (error) {
+        console.error(error);
+        return new Response(JSON.stringify({ error: 'Database error' }), { status: 500 });
     }
-    console.log(particulars);
-    return Response.json({ particulars }, { status: 200 });
 }
